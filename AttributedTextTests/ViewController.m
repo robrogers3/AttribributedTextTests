@@ -25,7 +25,7 @@
         self.attrTextLabel.attributedText = mat;
     }
 }
--(void) setSelecteWordAttributes:(NSDictionary *) attribute
+-(void) setSelectedWordAttributes:(NSDictionary *) attribute
 {
     NSRange range = [[self.attrTextLabel.attributedText string] rangeOfString:[self selectedWord]];
     [self setLabelAttributes:attribute range:range];
@@ -40,15 +40,6 @@
 {
     return self.wordList[(int)self.wordStepper.value];
 }
-- (IBAction)updatedSelectedWordColor:(UIButton *)sender {
-    [self setSelecteWordAttributes: @{NSForegroundColorAttributeName: sender.backgroundColor}];
-}
-- (IBAction)ununderlineSelectedWord {
-    [self setSelecteWordAttributes:@{NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)}];
-}
-- (IBAction)underlineSelectedWord {
-    [self setSelecteWordAttributes:@{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)}];
-}
 -(UIFont *) getWordFontAttr
 {
     NSRange range = [[self.attrTextLabel.attributedText string] rangeOfString:[self selectedWord]];
@@ -62,6 +53,15 @@
         return font;
     return nil;
 }
+- (IBAction)updatedSelectedWordColor:(UIButton *)sender {
+    [self setSelectedWordAttributes: @{NSForegroundColorAttributeName: sender.backgroundColor}];
+}
+- (IBAction)ununderlineSelectedWord {
+    [self setSelectedWordAttributes:@{NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)}];
+}
+- (IBAction)underlineSelectedWord {
+    [self setSelectedWordAttributes:@{NSUnderlineStyleAttributeName: @(NSUnderlineStyleSingle)}];
+}
 - (IBAction)changeFontStyle:(UIButton *)sender {
     CGFloat afontsize = [UIFont systemFontSize];
     
@@ -69,7 +69,7 @@
     if (f)
         afontsize = f.pointSize;
     UIFont *nf = [sender.titleLabel.font fontWithSize:afontsize];
-    [self setSelecteWordAttributes:@{NSFontAttributeName: nf}];
+    [self setSelectedWordAttributes:@{NSFontAttributeName: nf}];
 }
 - (IBAction)changeFontSizeOfWord:(UIStepper *)sender {
     UIFont *f = [self getWordFontAttr];
@@ -77,7 +77,7 @@
     NSLog(@"CHange fontsize %g", nfs);
     NSLog(@"stepper value %g",sender.value);
     NSDictionary *fa = @{NSFontAttributeName: [UIFont systemFontOfSize:nfs]};
-    [self setSelecteWordAttributes:fa];
+    [self setSelectedWordAttributes:fa];
     self.selectedFontsizeLabel.text = [NSString stringWithFormat:@"Font size %d", (int) nfs];
     sender.value = 0;
 }
@@ -89,6 +89,14 @@
     self.wordStepper.maximumValue = [self.wordList count] -1;
     self.selectedWordlabel.text = [self selectedWord];
     self.selectedFontsizeLabel.text = [NSString stringWithFormat:@"Font size %d", (int) f.pointSize];
+}
+- (IBAction)outline
+{
+    [self setSelectedWordAttributes:@{NSStrokeWidthAttributeName : @(3.0)}];
+}
+- (IBAction)unoutline
+{
+    [self setSelectedWordAttributes:@{NSStrokeWidthAttributeName : @(0)}];
 }
 - (void)viewDidLoad
 {
